@@ -1,0 +1,39 @@
+组件事件
+  componentDidMount事件场景
+    内部state恢复默认值
+    绑定事件
+  componentUnMount事件
+    解绑事件
+  componentPropsChange事件
+    内部state恢复默认值
+上下文
+  const varsRef = useRef();
+  const [cnt, setCnt] = useState();
+  const ctx = {
+    props,
+    state: { cnt },
+    setState: (key, value) => {
+      key === "cnt" && setCnt(value);
+    },
+    vars: { a, b ,c },
+    setVarsSync: (key, value) => {
+      varsRef.current = { ...vars, [key]: value };
+    },
+    loopArgs: [{ item, index }],
+    compute: { valueCnt },
+    libs: { react, reactDom, lodash, moment },
+    functions: { getApiBase, getHistory }
+  };
+组件事件函数(存在上下文)
+  移动至单独的文件中（实现访问隔离，闭包隔离）
+  const onClick = function () {
+    const { state, setState } = this.ctx;
+    setState("cnt", state.cnt + 1);
+  };
+组件计算值函数
+  移动至函数外部（实现访问隔离，闭包隔离）
+  函数参数props、state中function类型值需要去除掉，避免异步函数执行引起不必要麻烦
+  循环体内无法进行计算，需要在父层级计算好后再传入，例如状态值映射、数据行标识
+  const computeValueCnt = (props, state) => {
+    return props.value.length;
+  };
